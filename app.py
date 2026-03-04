@@ -28,7 +28,7 @@ if st.button("Analyze"):
     else:
         try:
             response = requests.post(
-                "http://127.0.0.1:8000/predict",
+                "https://anxiety-backend.onrender.com/predict",
                 json={
                     "text": text,
                     "sleep_hours": float(sleep_hours),
