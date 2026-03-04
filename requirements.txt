@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+streamlit
+transformers
+torch
+pandas
+scikit-learn
+numpy
+datasets
+python-multipart
+requests
