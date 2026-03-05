@@ -1,13 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from transformers import pipeline
+import requests
+import os
 
 app = FastAPI()
 
-classifier = pipeline(
-    "text-classification",
-    model="distilbert-base-uncased-finetuned-sst-2-english"
-)
+HF_API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+headers = {
+    "Authorization": f"Bearer {HF_TOKEN}"
+}
 
 class TextInput(BaseModel):
     text: str
@@ -18,15 +21,19 @@ def home():
 
 @app.post("/predict")
 def predict(data: TextInput):
-    result = classifier(data.text)[0]
+    response = requests.post(
+        HF_API_URL,
+        headers=headers,
+        json={"inputs": data.text}
+    )
+
+    result = response.json()[0]
 
     label = result["label"]
     score = result["score"]
 
-    if label == "NEGATIVE":
-        anxiety_level = "High" if score > 0.85 else "Moderate"
-    else:
-        anxiety_level = "Low"
+    anxiety_level = "High" if label == "NEGATIVE" and score > 0.85 else \
+                    "Moderate" if label == "NEGATIVE" else "Low"
 
     return {
         "label": label,
