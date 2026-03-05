@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-BACKEND_URL = "https://your-render-url.onrender.com/predict"
+BACKEND_URL = "https://ai-exam-anxiety-detector-2.onrender.com/predict"
 
 st.title("🧠 AI Exam Anxiety Detector")
 
