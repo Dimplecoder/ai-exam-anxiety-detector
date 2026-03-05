@@ -1,24 +1,3 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-import requests
-import os
-
-app = FastAPI()
-
-HF_API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-headers = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
-
-class TextInput(BaseModel):
-    text: str
-
-@app.get("/")
-def home():
-    return {"message": "Backend is working"}
-
 @app.post("/predict")
 def predict(data: TextInput):
     response = requests.post(
@@ -27,7 +6,13 @@ def predict(data: TextInput):
         json={"inputs": data.text}
     )
 
-    result = response.json()[0]
+    result_json = response.json()
+
+    # Handle nested response safely
+    if isinstance(result_json[0], list):
+        result = result_json[0][0]
+    else:
+        result = result_json[0]
 
     label = result["label"]
     score = result["score"]
