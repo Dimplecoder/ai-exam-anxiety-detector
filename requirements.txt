@@ -9,3 +9,4 @@ numpy
 datasets
 python-multipart
 requests
+pydantic
