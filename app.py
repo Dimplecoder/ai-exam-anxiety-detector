@@ -28,16 +28,16 @@ if st.button("Analyze"):
     else:
         try:
             response = requests.post(
-                "https://anxiety-backend.onrender.com/predict",
-                json={
-                    "text": text,
-                    "sleep_hours": float(sleep_hours),
-                    "study_hours": float(study_hours),
-                    "appetite_change": bool(appetite_change),
-                    "headaches": bool(headaches),
-                    "panic_symptoms": bool(panic_symptoms)
-                }
-            )
+    "https://ai-exam-anxiety-detector-1.onrender.com/predict",
+    json={
+        "text": text,
+        "sleep_hours": float(sleep_hours),
+        "study_hours": float(study_hours),
+        "appetite_change": appetite_change,
+        "headaches": headaches,
+        "panic_symptoms": panic_symptoms
+    }
+)
 
             if response.status_code != 200:
                 st.error(f"Backend Error: {response.text}")
